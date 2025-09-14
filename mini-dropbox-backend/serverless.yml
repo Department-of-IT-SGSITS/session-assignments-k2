@@ -1,0 +1,53 @@
+service: mini-dropbox-backend
+frameworkVersion: '4'
+
+# In serverless.yml
+
+provider:
+  name: aws
+  runtime: nodejs20.x
+  region: us-east-1
+  
+  httpApi:
+    cors: true
+    authorizers:
+      cognitoAuthorizer:
+        type: jwt
+        identitySource: $request.header.Authorization
+        issuerUrl: https://cognito-idp.us-east-1.amazonaws.com/us-east-1_gT7aTwLmQ
+        audience:
+          - '7kjlbaivc6l2rj7otiahdp49m6'
+
+  iam:
+    role: arn:aws:iam::544433947734:role/MiniDropboxLambdaRole
+
+  environment:
+    BUCKET_NAME: kanishk-mini-dropbox
+    BUCKET_REGION: us-east-1
+    TABLE_NAME: files
+    INDEX_NAME: userId-index
+
+functions:
+  getUploadUrl:
+    handler: get-upload-url/index.handler
+    events:
+      - httpApi:
+          path: /get-upload-url
+          method: post
+          authorizer: cognitoAuthorizer
+
+  listFiles:
+    handler: list-files/index.handler
+    events:
+      - httpApi:
+          path: /files
+          method: get
+          authorizer: cognitoAuthorizer
+
+  recordMetadata:
+    handler: record-metadata/index.handler
+    events:
+      - s3:
+          bucket: kanishk-mini-dropbox
+          event: s3:ObjectCreated:*
+          existing: true
