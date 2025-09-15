@@ -14,7 +14,7 @@ export const handler = async (event) => {
     const body = JSON.parse(event.body);
     const { fileName, fileType, fileSize } = body;
     
-    // --- Keep existing validation logic ---
+    // --- Start validation logic ---
     if (!fileName || !fileType || !fileSize) {
         return { statusCode: 400, body: JSON.stringify({ message: "Missing fileName, fileType, or fileSize" })};
     }
@@ -29,7 +29,7 @@ export const handler = async (event) => {
     // --- End validation logic ---
 
     const randomBytes = crypto.randomBytes(16);
-    // NEW: Include userId in the S3 key for better organization
+    // Including userId in the S3 key for better organization
     const storageKey = `${userId}/${randomBytes.toString("hex")}-${fileName}`;
 
     const command = new PutObjectCommand({

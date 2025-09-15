@@ -1,8 +1,6 @@
 service: mini-dropbox-backend
 frameworkVersion: '4'
 
-# In serverless.yml
-
 provider:
   name: aws
   runtime: nodejs20.x

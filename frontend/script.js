@@ -1,6 +1,6 @@
-// --- YOUR COGNITO AND API DETAILS HERE ---
+// ---COGNITO AND API DETAILS ---
 const cognitoConfig = {
-    UserPoolId: 'us-east-1_gT7aTwLmQ', // Corrected: No space after the underscore
+    UserPoolId: 'us-east-1_gT7aTwLmQ', 
     ClientId: '7kjlbaivc6l2rj7otiahdp49m6',
 };
 const API_BASE_URL = 'https://86aja8ns6k.execute-api.us-east-1.amazonaws.com';
@@ -112,7 +112,6 @@ async function initApp() {
         userEmailSpan.textContent = currentUser.getUsername();
         showView('app-view');
         
-        // Attach event listener after app view is shown
         uploadButton.addEventListener('click', uploadFile);
         
         // Fetch initial files

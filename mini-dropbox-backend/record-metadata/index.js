@@ -14,7 +14,7 @@ export const handler = async (event) => {
     const storageKey = decodeURIComponent(record.s3.object.key.replace(/\+/g, " "));
     const fileSize = record.s3.object.size;
     
-    // NEW: Extract the userId from the S3 key (e.g., "us-east-1:uuid/random-filename.txt")
+    //Extracting the userId from the S3 key (e.g., "us-east-1:uuid/random-filename.txt")
     const userId = storageKey.split('/')[0];
     const originalFileName = storageKey.substring(storageKey.indexOf("-") + 1);
     const fileId = randomUUID();
