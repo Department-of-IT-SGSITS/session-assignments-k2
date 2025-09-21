@@ -101,3 +101,110 @@ li a:hover {
   margin-top: 1em;
   display: inline-block;
 }
+
+.delete-button {
+    background-color: #dc3545; /* A standard red color */
+    padding: 0.4em 0.8em;
+    font-size: 0.9em;
+    margin-left: 1em;
+}
+
+.delete-button:hover {
+    background-color: #c82333;
+}
+
+.rename-button {
+    background-color: #ffc107; /* A standard yellow color */
+    color: #212529;
+    padding: 0.4em 0.8em;
+    font-size: 0.9em;
+    margin-left: 1em;
+}
+.rename-button:hover {
+    background-color: #e0a800;
+}
+.file-actions {
+    display: flex;
+}
+.file-info input {
+    width: 60%; /* Make the rename input box smaller */
+}
+.search-container {
+    display: flex;
+    gap: 10px;
+    margin: 1.5em 0;
+}
+.search-container input {
+    flex-grow: 1;
+    margin-bottom: 0;
+}
+
+.share-button {
+    background-color: #28a745; /* A standard green color */
+    padding: 0.4em 0.8em;
+    font-size: 0.9em;
+    margin-left: 1em;
+}
+.share-button:hover {
+    background-color: #218838;
+}
+.download-button {
+    background-color: #198754; 
+    color: white;
+    padding: 0.4em 0.8em;
+    font-size: 0.9em;
+    margin-left: 1em;
+    border-radius: 4px;
+    text-decoration: none;
+}
+.download-button:hover {
+    background-color: #157347;
+}
+progress {
+    width: 100%;
+    margin-top: 1em;
+}
+#drop-zone {
+    border: 2px dashed #ccc;
+    border-radius: 8px;
+    padding: 2em;
+    text-align: center;
+    color: #6c757d;
+    transition: border-color 0.3s, background-color 0.3s;
+}
+
+#drop-zone.drag-over {
+    border-color: #007bff;
+    background-color: #f0f8ff;
+}
+.status-error {
+    color: #dc3545; 
+    font-weight: bold;
+}
+
+progress {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 12px;
+  border-radius: 10px;
+  border: 1px solid #ccc;
+  margin-top: 1em;
+}
+
+progress::-webkit-progress-value {
+  background-color: #28a745; 
+  border-radius: 10px;
+  transition: width 0.1s ease;
+}
+
+progress::-webkit-progress-bar {
+  background-color: #e9ecef;
+  border-radius: 10px;
+}
+
+progress::-moz-progress-bar {
+  background-color: #28a745; 
+  border-radius: 10px;
+  transition: width 0.1s ease;
+}

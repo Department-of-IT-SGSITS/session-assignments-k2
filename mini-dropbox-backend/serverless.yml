@@ -12,9 +12,9 @@ provider:
       cognitoAuthorizer:
         type: jwt
         identitySource: $request.header.Authorization
-        issuerUrl: https://cognito-idp.us-east-1.amazonaws.com/us-east-1_gT7aTwLmQ
+        issuerUrl: https://cognito-idp.us-east-1.amazonaws.com/us-east-1_b2B3qymqU
         audience:
-          - '7kjlbaivc6l2rj7otiahdp49m6'
+          - '1bhpl5kklaj9cavtbfib58b1fv'
 
   iam:
     role: arn:aws:iam::544433947734:role/MiniDropboxLambdaRole
@@ -45,7 +45,39 @@ functions:
   recordMetadata:
     handler: record-metadata/index.handler
     events:
-      - s3:
-          bucket: kanishk-mini-dropbox
-          event: s3:ObjectCreated:*
-          existing: true
+      - httpApi:
+          path: /files 
+          method: post
+          authorizer: cognitoAuthorizer 
+
+  deleteFile:
+    handler: delete-file/index.handler
+    events:
+      - httpApi:
+          path: /files/{fileId} 
+          method: delete
+          authorizer: cognitoAuthorizer
+
+  renameFile:
+    handler: rename-file/index.handler
+    events:
+      - httpApi:
+          path: /files/{fileId} 
+          method: patch 
+          authorizer: cognitoAuthorizer
+
+  searchFiles:
+    handler: search-files/index.handler
+    events:
+      - httpApi:
+          path: /files/search
+          method: get
+          authorizer: cognitoAuthorizer
+
+  getShareableLink:
+    handler: get-shareable-link/index.handler
+    events:
+      - httpApi:
+          path: /files/{fileId}/share
+          method: post
+          authorizer: cognitoAuthorizer

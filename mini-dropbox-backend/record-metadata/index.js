@@ -8,30 +8,41 @@ const client = new DynamoDBClient({});
 const docClient = DynamoDBDocumentClient.from(client);
 
 export const handler = async (event) => {
-  console.log("Received S3 event:", JSON.stringify(event, null, 2));
 
-  const promises = event.Records.map(async (record) => {
-    const storageKey = decodeURIComponent(record.s3.object.key.replace(/\+/g, " "));
-    const fileSize = record.s3.object.size;
-    
-    //Extracting the userId from the S3 key (e.g., "us-east-1:uuid/random-filename.txt")
-    const userId = storageKey.split('/')[0];
-    const originalFileName = storageKey.substring(storageKey.indexOf("-") + 1);
-    const fileId = randomUUID();
-    
-    const command = new PutCommand({
-      TableName: TABLE_NAME,
-      Item: { fileId, userId, storageKey, originalFileName, fileSize, uploadTimestamp: new Date().toISOString() },
-    });
+  const userId = event.requestContext.authorizer.jwt.claims.sub;
 
-    try {
-      await docClient.send(command);
-      console.log(`Successfully recorded metadata for ${storageKey}`);
-    } catch (err) {
-      console.error(`Error recording metadata for ${storageKey}:`, err);
-    }
+  const body = JSON.parse(event.body);
+  const { storageKey, originalFileName, fileSize, tag } = body;
+
+  const fileId = randomUUID();
+
+  const command = new PutCommand({
+    TableName: TABLE_NAME,
+    Item: {
+      fileId: fileId,
+      userId: userId,
+      storageKey: storageKey,
+      originalFileName: originalFileName,
+      fileSize: fileSize,
+      tag: tag || "No tag", 
+      uploadTimestamp: new Date().toISOString(),
+    },
   });
 
-  await Promise.all(promises);
-  return { statusCode: 200, body: JSON.stringify({ message: "Metadata processing complete." }) };
+  try {
+    await docClient.send(command);
+    console.log(`Successfully recorded metadata for ${storageKey}`);
+    return {
+      statusCode: 201, 
+      headers: { "Access-Control-Allow-Origin": "*" },
+      body: JSON.stringify({ message: "Metadata recorded successfully", fileId }),
+    };
+  } catch (err) {
+    console.error(`Error recording metadata for ${storageKey}:`, err);
+    return {
+      statusCode: 500,
+      headers: { "Access-Control-Allow-Origin": "*" },
+      body: JSON.stringify({ message: "Error recording metadata" }),
+    };
+  }
 };

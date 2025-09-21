@@ -22,12 +22,20 @@ export const handler = async (event) => {
     if (fileSize > MAX_FILE_SIZE_MB * 1024 * 1024) {
         return { statusCode: 400, body: JSON.stringify({ message: `File is too large. Maximum size is ${MAX_FILE_SIZE_MB} MB.` })};
     }
-    const ALLOWED_FILE_TYPES = ["image/jpeg", "image/png"];
-    if (!ALLOWED_FILE_TYPES.includes(fileType)) {
-        return { statusCode: 400, body: JSON.stringify({ message: "Invalid file type. Only JPG or PNG are allowed." })};
-    }
-    // --- End validation logic ---
+    
+    // --- THIS IS THE UPDATED LINE ---
+    const ALLOWED_FILE_TYPES = [
+        "image/jpeg", 
+        "image/png",
+        "application/pdf",
+        "application/vnd.openxmlformats-officedocument.wordprocessingml.document", // .docx
+        "video/mp4"
+    ];
 
+    if (!ALLOWED_FILE_TYPES.includes(fileType)) {
+        return { statusCode: 400, body: JSON.stringify({ message: "Invalid file type." })};
+    }
+ 
     const randomBytes = crypto.randomBytes(16);
     // Including userId in the S3 key for better organization
     const storageKey = `${userId}/${randomBytes.toString("hex")}-${fileName}`;
