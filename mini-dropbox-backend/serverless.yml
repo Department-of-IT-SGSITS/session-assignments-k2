@@ -1,0 +1,83 @@
+service: mini-dropbox-backend
+frameworkVersion: '4'
+
+provider:
+  name: aws
+  runtime: nodejs20.x
+  region: us-east-1
+  
+  httpApi:
+    cors: true
+    authorizers:
+      cognitoAuthorizer:
+        type: jwt
+        identitySource: $request.header.Authorization
+        issuerUrl: https://cognito-idp.us-east-1.amazonaws.com/us-east-1_b2B3qymqU
+        audience:
+          - '1bhpl5kklaj9cavtbfib58b1fv'
+
+  iam:
+    role: arn:aws:iam::544433947734:role/MiniDropboxLambdaRole
+
+  environment:
+    BUCKET_NAME: kanishk-mini-dropbox
+    BUCKET_REGION: us-east-1
+    TABLE_NAME: files
+    INDEX_NAME: userId-index
+
+functions:
+  getUploadUrl:
+    handler: get-upload-url/index.handler
+    events:
+      - httpApi:
+          path: /get-upload-url
+          method: post
+          authorizer: cognitoAuthorizer
+
+  listFiles:
+    handler: list-files/index.handler
+    events:
+      - httpApi:
+          path: /files
+          method: get
+          authorizer: cognitoAuthorizer
+
+  recordMetadata:
+    handler: record-metadata/index.handler
+    events:
+      - httpApi:
+          path: /files 
+          method: post
+          authorizer: cognitoAuthorizer 
+
+  deleteFile:
+    handler: delete-file/index.handler
+    events:
+      - httpApi:
+          path: /files/{fileId} 
+          method: delete
+          authorizer: cognitoAuthorizer
+
+  renameFile:
+    handler: rename-file/index.handler
+    events:
+      - httpApi:
+          path: /files/{fileId} 
+          method: patch 
+          authorizer: cognitoAuthorizer
+
+  searchFiles:
+    handler: search-files/index.handler
+    events:
+      - httpApi:
+          path: /files/search
+          method: get
+          authorizer: cognitoAuthorizer
+
+  getShareableLink:
+    handler: get-shareable-link/index.handler
+    events:
+      - httpApi:
+          path: /files/{fileId}/share
+          method: post
+          authorizer: cognitoAuthorizer

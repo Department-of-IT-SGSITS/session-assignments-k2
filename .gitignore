@@ -1,0 +1,22 @@
+# Node.js / npm
+# Ignore dependency folders and logs.
+# It's a best practice to COMMIT your package-lock.json for applications.
+node_modules/
+npm-debug.log*
+
+# Serverless Framework
+# Ignore deployment artifacts and state files.
+.serverless/
+
+# Editor-specific files
+# Ignore Visual Studio Code settings folder.
+.vscode/
+
+# Operating System files
+# Ignore macOS and Windows system files.
+.DS_Store
+Thumbs.db
+
+# Environment variables
+# Ignore files containing secrets or environment-specific configuration.
+.env*
