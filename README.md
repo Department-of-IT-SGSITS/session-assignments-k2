@@ -35,7 +35,6 @@ A full-stack, cloud-native file storage application similar to Dropbox. This pro
 - HTML5, CSS3, Vanilla JavaScript
 - Amazon Cognito Identity SDK for JavaScript
 
-## Getting Started
 
 ### Prerequisites
 - An AWS Account
